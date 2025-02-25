@@ -7,24 +7,53 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
+
+class Usuario(Base):
+    __tablename__ = 'usuario'
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
+    nombre = Column(String(250), nullable=False)
+    seguidores = Column(Integer, nullable=False)                   
+    posts = Column(Integer, nullable=False)
+
+class Publicacion(Base):
+    __tablename__ = 'publicacion'
+    # Here we define columns for the table person
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    id_usuario = Column(Integer, nullable=False)
+    descripcion = Column(String(250), nullable=False)                   
+    likes= Column(Integer, nullable=False)
+    url_imagen= Column(String(250), nullable=False)
+    usuario_id = Column(Integer, ForeignKey('usuario.id'))
+    usuario = relationship(Usuario)
 
 
-class Address(Base):
-    __tablename__ = 'address'
+
+class Comentarios(Base):
+    __tablename__ = 'comentarios'
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    id_usuario= Column(Integer)
+    id_publicacion = Column(Integer)
+    comentarios = Column(String(250), nullable=False)
+    publicacion_id = Column(Integer, ForeignKey('publicacion.id'))
+    publicacion = relationship(Publicacion)
+
+class Seguidores(Base):
+    __tablename__ = 'seguidores'
+    # Here we define columns for the table person
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    usuario_id = Column(Integer, ForeignKey('usuario.id'))
+    usuario = relationship(Usuario)
+    id_seguir= Column(Integer)
+
+    
+    
+
 
     def to_dict(self):
         return {}
